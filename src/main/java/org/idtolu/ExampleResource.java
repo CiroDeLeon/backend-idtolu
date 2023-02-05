@@ -10,6 +10,7 @@ public class ExampleResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
+    @NotRequiredToken
     public String hello() {
     	System.out.println("iniciando hello");
         return "Hello from RESTEasy Reactive";
