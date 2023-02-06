@@ -35,8 +35,21 @@ public class User extends PanacheEntity {
 
     @NotNull
     private String password;
+    
+    @NotNull
+    private String role;
+    
+    
 
-    public Long getId() {
+    public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public Long getId() {
         return id;
     }
 

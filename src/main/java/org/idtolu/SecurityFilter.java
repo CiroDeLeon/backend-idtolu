@@ -27,6 +27,14 @@ import java.lang.reflect.Method;
 @interface NotRequiredToken {
 }
 
+@Retention(RetentionPolicy.RUNTIME)
+@interface UsedByAdmin {
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@interface UsedByUser {
+}
+
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class SecurityFilter implements ContainerRequestFilter {
@@ -60,7 +68,18 @@ public class SecurityFilter implements ContainerRequestFilter {
             throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN)
                     .entity("Invalid token").build());
         }
-
+        if(user.getRole().toUpperCase().equals("ADMIN")) {
+        	if (!method.isAnnotationPresent(UsedByAdmin.class)) {
+        		throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN)
+                        .entity("Not permission").build());
+            }	
+        }
+        if(user.getRole().toUpperCase().equals("USER")) {
+        	if (!method.isAnnotationPresent(UsedByUser.class)) {
+        		throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN)
+                        .entity("Not permission").build());
+            }
+        }
         try {
             JWT.require(Algorithm.HMAC256(user.getUsername()))
                     .build()

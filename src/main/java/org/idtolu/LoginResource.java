@@ -7,8 +7,10 @@ import java.util.Set;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -94,6 +96,8 @@ public class LoginResource {
     @Path("/reset-password")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @UsedByAdmin
+    @UsedByUser
     public Response resetPassword(Credentials credentials) {
     	List<String> errorMessages = validate(credentials);
 
@@ -107,6 +111,32 @@ public class LoginResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
-
+    @POST
+    @Path("/only-for-admin")
+    @Produces(MediaType.TEXT_PLAIN)
+    @UsedByAdmin
+    public String onlyForAdmin() {
+        return "hi admin";
+    }
+    
+    @POST
+    @Path("/only-for-user")
+    @Produces(MediaType.TEXT_PLAIN)
+    @UsedByUser
+    public String onlyForUser() {
+        return "hi user";
+    }
+    
+    @POST
+    @Path("/roleByUsername/username/{userName}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @NotRequiredToken
+    public String getRoleByUsername(@PathParam("userName")String userName) {    	
+    	  try {
+              return this.loginService.getRoleByUsername(userName);
+          } catch (Exception e) {
+              return null;
+          }
+    }
     
 }

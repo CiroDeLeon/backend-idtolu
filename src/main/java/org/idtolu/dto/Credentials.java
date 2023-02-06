@@ -1,6 +1,7 @@
 package org.idtolu.dto;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Credentials {
@@ -11,8 +12,19 @@ public class Credentials {
 	  @NotNull(message = "La contraseña es requerida")
 	  @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
 	  private String password;
+	  @NotNull(message = "El Role es requerido debe ser 'ADMIN' o 'USER' ")
+	  @Pattern(regexp="(ADMIN|USER)", message="El valor del role debe ser 'ADMIN' o 'USER'")
+	  private String role;
 
-    public String getUsername() {
+    public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getUsername() {
         return username;
     }
 

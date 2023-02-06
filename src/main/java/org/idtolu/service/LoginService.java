@@ -37,7 +37,7 @@ public class LoginService {
         User user = new User();
         user.setUsername(credentials.getUsername());
         user.setPassword(hashPassword(credentials.getPassword()));
-
+        user.setRole(credentials.getRole());
         // Save user to database
         this.userRepository.persist(user);
 
@@ -71,6 +71,13 @@ public class LoginService {
 	    user.setPassword(hashPassword(obj.getPassword()));
 	    userRepository.update(user);
 	    return user;
+	}
+	public String getRoleByUsername(String userName) throws Exception{
+		User user = userRepository.findByUsername(userName);
+		if (user == null) {
+	        throw new Exception("Username not found");
+	    }
+		return user.getRole();
 	}
 
 }
